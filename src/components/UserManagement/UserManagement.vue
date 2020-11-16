@@ -5,7 +5,7 @@
         <hci-menu :activeIndex='"1-1"' />
       </el-col>
       <el-col :offset="5" :span="19">
-          <h1>Quản lý người dùng</h1>
+          <h1>Quản lý nhân viên</h1>
           <el-table
             stripe
             :data="subAccountData"
