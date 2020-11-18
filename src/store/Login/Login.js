@@ -21,7 +21,7 @@ const login = {
      * Check Login By Username && Password
      */
     _checkLogin (context) {
-      let url = '/api/authenticate/login'
+      let url = '/api/users/login'
       return new Promise((resolve, reject) => {
         axios.post(url, {
           username: context.state._formData.username,

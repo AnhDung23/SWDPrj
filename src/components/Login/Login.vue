@@ -105,7 +105,7 @@ export default {
 
         sessionStorage.setItem('username', this.formData.username)
         sessionStorage.setItem('employeeId', res.data.employeeId)
-        sessionStorage.setItem('token', 'Bearer ' + res.data.token)
+        sessionStorage.setItem('token', 'Bearer ' + res.data.access_token)
 
         this.transitTo('UserManagement', {username: this.formData.username})
 

@@ -16,7 +16,8 @@ import '@fortawesome/fontawesome-free/js/all.js'
 
 // Axios.defaults.baseURL = ''
 // Axios.defaults.baseURL = 'http://localhost:8084'
-Axios.defaults.baseURL = 'http://34.230.45.99:8084'
+// Axios.defaults.baseURL = 'http://34.230.45.99:8084'
+Axios.defaults.baseURL = 'http://apihr.reso.vn/'
 
 Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false

@@ -73,7 +73,21 @@ const employee = {
     }
   },
   actions: {
-  /**
+    getEmployeeByStoreId (context, storeId) {
+      let url = '/api/employees/get-by-store/' + storeId
+      return new Promise((resolve, reject) => {
+        axios.get(
+          url,
+          {headers: {Authorization: sessionStorage.getItem('token')}}
+        ).then((res) => {
+          resolve(res.data)
+        })
+          .catch((e) => {
+            reject(e)
+          })
+      })
+    },
+    /**
      * api create new employee
      */
     createNewEmployee (context, employeeInfo) {

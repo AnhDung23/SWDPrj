@@ -9,7 +9,7 @@ import workAssign from './Work/WorkAssign'
 // import notification from './Notification/Notification'
 // import editNotification from './Notification/EditNotification'
 // import createNotification from './Notification/CreateNotification'
-// import account from './Account/AccountManagement'
+import account from './Account/AccountManagement'
 // import createAccount from './Account/NewAccount'
 // import changePassword from './ChangePassword/ChangePassword'
 import employee from './Employee/employee'
@@ -25,7 +25,7 @@ export default new Vuex.Store({
     // work: work,
     // workEdit: workEdit,
     // workRequest: workRequest,
-    // account: account,
+    account: account,
     // createAccount: createAccount,
     workAssign: workAssign,
     // changePassword: changePassword,

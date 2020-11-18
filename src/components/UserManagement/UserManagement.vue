@@ -6,10 +6,22 @@
       </el-col>
       <el-col :offset="5" :span="19">
           <h1>Quản lý nhân viên</h1>
+          <div>
+            Chọn cửa hàng:
+              <el-select v-model="search" placeholder="Select" @change="changeStoreSearch">
+                <el-option
+                  v-for="store in storeList"
+                  :key="store.id"
+                  :label="store.name"
+                  :value="store.id">
+                </el-option>
+              </el-select>
+          </div>
           <el-table
             stripe
             :data="subAccountData"
             style="width: 95%; margin-left: 2.5%"
+            @row-click="empRowClick"
             empty-text="Không có dữ liệu">
           <el-table-column
             label="Tài Khoản"
@@ -22,42 +34,24 @@
             prop="name">
           </el-table-column>
           <el-table-column
-            label="Giới tính"
-            width="90px"
-          >
-            <template slot-scope="scope">
-              <span>{{ scope.row.gender ? 'Nam' : 'Nữ'}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
             label="Địa chỉ"
             width="260px"
             prop="address">
           </el-table-column>
           <el-table-column
             label="Số điện thoại"
-            prop="phone">
+            prop="phone_number">
           </el-table-column>
           <el-table-column
             align="right">
-            <template slot="header" slot-scope="scope">
-              <el-input
-                v-model="search"
-                size="mini"
-                placeholder="Tìm tên"/>
-            </template>
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                style="background-color: #82FA58;"
-                :disabled="scope.row.active"
-                @click="handleClicked(scope.$index, scope.row, 'Active')">Active</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                :disabled="!scope.row.active"
-                @click="handleClicked(scope.$index, scope.row, 'Inactive')">Inactive</el-button>
-            </template>
+              <!-- <div>
+                    Chọn sân:
+                      <el-select v-model="search" slot="prepend" placeholder="Select">
+                        <el-option label="Sân A" value="1"></el-option>
+                        <el-option label="Sân B" value="2"></el-option>
+                        <el-option label="Sân C" value="3"></el-option>
+                      </el-select>
+                  </div> -->
           </el-table-column>
         </el-table>
         <el-pagination
@@ -88,6 +82,7 @@ export default {
       subAccountData: [],
       searchList: [],
       accountData: [],
+      storeList: [],
       search: '',
       loader: {}
     }
@@ -96,20 +91,20 @@ export default {
     'hci-menu': Menu
   },
   watch: {
-    search () {
-      this.searchList = this.accountData.filter(data => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
-      if (this.search.length > 0) {
-        this.currentPage = 1
-        this.numOfPage = this.searchList.length / this.pageSize
-      } else {
-        this.numOfPage = this.accountData.length / this.pageSize
-      }
-      let firstIndex = (this.currentPage - 1) * this.pageSize
-      let lastIndex = (this.currentPage * this.pageSize - 1)
-      this.subAccountData = this.searchList.filter((item, index) => {
-        return index >= firstIndex && index <= lastIndex
-      })
-    }
+    // search () {
+    //   this.searchList = this.accountData.filter(data => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
+    //   if (this.search.length > 0) {
+    //     this.currentPage = 1
+    //     this.numOfPage = this.searchList.length / this.pageSize
+    //   } else {
+    //     this.numOfPage = this.accountData.length / this.pageSize
+    //   }
+    //   let firstIndex = (this.currentPage - 1) * this.pageSize
+    //   let lastIndex = (this.currentPage * this.pageSize - 1)
+    //   this.subAccountData = this.searchList.filter((item, index) => {
+    //     return index >= firstIndex && index <= lastIndex
+    //   })
+    // }
   },
   mounted () {
     this.checkAuthen()
@@ -118,7 +113,8 @@ export default {
   },
   methods: {
     ...mapActions('workAssign', ['_getEmployeeList']),
-    ...mapActions('employee', ['updateStatusEmployee']),
+    ...mapActions('employee', ['getEmployeeByStoreId']),
+    ...mapActions('account', ['getAllStore']),
     /**
      * Show Loader
      */
@@ -135,10 +131,11 @@ export default {
       new Promise((resolve, reject) => {
         resolve()
       }).then(() => {
-        return _this._getEmployeeList(0)
+        return _this.getAllStore()
       }).then(res => {
         if (res.data) {
-          _this.accountData = res.data
+          _this.storeList = res.data
+          _this.search = _this.storeList[0].id
         }
         _this.numOfPage = Math.ceil(_this.accountData.length / _this.pageSize)
         _this.changePage()
@@ -161,6 +158,20 @@ export default {
           this.showMessage(typeButton + ' user successful !!!', 'success')
         }
         this.closeLoader(this.loader)
+      })
+    },
+    empRowClick (row) {
+    },
+    changeStoreSearch () {
+      let _this = this
+      new Promise((resolve, reject) => {
+        resolve()
+      }).then(() => {
+        return _this.getEmployeeByStoreId(_this.search)
+      }).then(res => {
+        let list = []
+        list.push(res)
+        _this.subAccountData = list
       })
     },
     changePage () {

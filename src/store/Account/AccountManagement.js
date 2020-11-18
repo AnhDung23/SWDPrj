@@ -4,7 +4,8 @@ const account = {
   namespaced: true,
   state: {
     _username: '',
-    _accountData: []
+    _accountData: [],
+    listStore: []
   },
   getters: {
 
@@ -21,6 +22,9 @@ const account = {
      */
     _setAccountData (state, _accountData) {
       state._accountData = _accountData
+    },
+    setListStore (state, listStore) {
+      state.listStore = listStore
     }
   },
   actions: {
@@ -72,6 +76,22 @@ const account = {
           {headers: {Authorization: sessionStorage.getItem('token')}}
         )
           .then((res) => {
+            resolve(res)
+          })
+          .catch((e) => {
+            reject(e)
+          })
+      })
+    },
+    getAllStore (context) {
+      let url = '/api/stores'
+      return new Promise((resolve, reject) => {
+        axios.get(url, {
+          params: {},
+          headers: {Authorization: sessionStorage.getItem('token')}
+        })
+          .then((res) => {
+            context.commit('setListStore', res.data)
             resolve(res)
           })
           .catch((e) => {
