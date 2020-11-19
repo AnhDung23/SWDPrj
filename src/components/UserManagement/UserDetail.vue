@@ -9,28 +9,33 @@
                   <div slot="header" class="clearfix">
                     <span>Thông tin nhân viên</span>
                   </div>
-                  <div class="text item">
+                  <div class="text">
                     {{'Họ và tên: ' +  empInfo.name}}
                   </div>
-                  <div  class="text item">
+                  <div  class="text">
                       {{'Địa chỉ: ' +  empInfo.address}}
                   </div>
-                  <div  class="text item">
+                  <div  class="text">
                       {{'Email: ' +  empInfo.email}}
                   </div>
-                  <div  class="text item">
+                  <div  class="text">
                       {{'Số điện thoại: ' +  empInfo.phone_number}}
                   </div>
-                  <div  class="text item">
+                  <div  class="text">
                       {{'Chức vụ: ' +  empInfo.employee_regency}}
                   </div>
-                  <div  class="text item">
+                  <div  class="text">
                       {{'Của hàng: ' +  storeNm}}
                   </div>
-                  <div  class="text item">
+                  <div  class="text">
                       {{'Lương/ngày: ' +  empInfo.salary + ' VNĐ'}}
                   </div>
                 </el-card>
+            </el-col>
+            <el-col>
+                <el-button @click="backPage" class="button">
+                    Trở về
+                </el-button>
             </el-col>
         </el-row>
     </div>
@@ -82,6 +87,9 @@ export default {
         }
       })
     },
+    backPage () {
+      this.transitTo('UserManagement')
+    },
     /**
      * Check Authen
      */
@@ -89,7 +97,14 @@ export default {
       if (!sessionStorage.getItem('username')) {
         this.transitTo('Login', undefined)
       }
-    }
+    },
+    transitTo (name, data) {
+      const param = {
+        name: name,
+        params: data
+      }
+      this.$router.push(param)
+    },
   }
 }
 </script>
@@ -97,9 +112,8 @@ export default {
 <style>
     .text {
         font-size: 14px;
-    }
-    .item {
         margin-bottom: 18px;
+        text-align: left;
     }
     .clearfix:before,
     .clearfix:after {
@@ -113,5 +127,10 @@ export default {
         margin-left: 25%;
         margin-top: 5%;
         width: 50%;
+    }
+    .button {
+        margin-top: 3%;
+        margin-left: 25%;
+        float: left;
     }
 </style>

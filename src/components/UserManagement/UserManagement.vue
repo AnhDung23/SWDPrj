@@ -19,7 +19,7 @@
           </div>
           <el-table
             stripe
-            :data="subAccountData"
+            :data="subEmployeeDataList"
             style="width: 95%; margin-left: 2.5%"
             @row-click="empRowClick"
             empty-text="Không có dữ liệu">
@@ -48,7 +48,7 @@
           layout="prev, pager, next"
           :hide-on-single-page="true"
           @current-change="changePage()"
-          :total="searchList.length === 0 ? accountData.length : searchList.length">
+          :total="employeeDataList.length === 0 ? accountData.length : employeeDataList.length">
         </el-pagination>
       </el-col>
     </el-row>
@@ -65,8 +65,8 @@ export default {
       numOfPage: 0,
       currentPage: 1,
       pageSize: 3,
-      subAccountData: [],
-      searchList: [],
+      subEmployeeDataList: [],
+      employeeDataList: [],
       accountData: [],
       storeList: [],
       searchStoreId: '',
@@ -78,16 +78,16 @@ export default {
   },
   watch: {
     // search () {
-    //   this.searchList = this.accountData.filter(data => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
+    //   this.employeeDataList = this.accountData.filter(data => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
     //   if (this.search.length > 0) {
     //     this.currentPage = 1
-    //     this.numOfPage = this.searchList.length / this.pageSize
+    //     this.numOfPage = this.employeeDataList.length / this.pageSize
     //   } else {
     //     this.numOfPage = this.accountData.length / this.pageSize
     //   }
     //   let firstIndex = (this.currentPage - 1) * this.pageSize
     //   let lastIndex = (this.currentPage * this.pageSize - 1)
-    //   this.subAccountData = this.searchList.filter((item, index) => {
+    //   this.subEmployeeDataList = this.employeeDataList.filter((item, index) => {
     //     return index >= firstIndex && index <= lastIndex
     //   })
     // }
@@ -130,24 +130,24 @@ export default {
         _this.changeStoreSearch()
       })
     },
-    handleClicked (index, row, typeButton) {
-      this.$confirm('Do you want to ' + String(typeButton).toLowerCase() + ' ' + row.name + ' ?', 'Warning', {
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-        type: 'warning'
-      }).then(() => {
-        let empDataset = row
-        empDataset.active = typeButton === 'Active'
-        this.loader = this.getLoader()
-        return this.updateStatusEmployee(empDataset)
-      }).then(res => {
-        if (res) {
-          row.active = typeButton === 'Active'
-          this.showMessage(typeButton + ' user successful !!!', 'success')
-        }
-        this.closeLoader(this.loader)
-      })
-    },
+    // handleClicked (index, row, typeButton) {
+    //   this.$confirm('Do you want to ' + String(typeButton).toLowerCase() + ' ' + row.name + ' ?', 'Warning', {
+    //     confirmButtonText: 'Yes',
+    //     cancelButtonText: 'No',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     let empDataset = row
+    //     empDataset.active = typeButton === 'Active'
+    //     this.loader = this.getLoader()
+    //     return this.updateStatusEmployee(empDataset)
+    //   }).then(res => {
+    //     if (res) {
+    //       row.active = typeButton === 'Active'
+    //       this.showMessage(typeButton + ' user successful !!!', 'success')
+    //     }
+    //     this.closeLoader(this.loader)
+    //   })
+    // },
     empRowClick (row) {
       let storeSearch = this.storeList.filter(item => {
         return item.id === this.searchStoreId
@@ -163,18 +163,18 @@ export default {
       }).then(() => {
         return _this.getEmployeeByStoreId(_this.searchStoreId)
       }).then(res => {
-        _this.subAccountData = res
+        _this.subEmployeeDataList = res
       })
     },
     changePage () {
       let firstIndex = (this.currentPage - 1) * this.pageSize
       let lastIndex = (this.currentPage * this.pageSize - 1)
-      if (this.searchList.length > 0) {
-        this.subAccountData = this.searchList.filter((item, index) => {
+      if (this.employeeDataList.length > 0) {
+        this.subEmployeeDataList = this.employeeDataList.filter((item, index) => {
           return index >= firstIndex && index <= lastIndex
         })
       } else {
-        this.subAccountData = this.accountData.filter((item, index) => {
+        this.subEmployeeDataList = this.accountData.filter((item, index) => {
           return index >= firstIndex && index <= lastIndex
         })
       }
@@ -221,10 +221,10 @@ export default {
 }
 </script>
 <style>
-  .el-button.is-disabled, .el-button.is-disabled:focus, .el-button.is-disabled:hover {
+  /* .el-button.is-disabled, .el-button.is-disabled:focus, .el-button.is-disabled:hover {
     color: white;
   }
   .el-button {
     color: black;
-  }
+  } */
 </style>
