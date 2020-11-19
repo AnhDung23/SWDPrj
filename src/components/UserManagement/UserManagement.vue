@@ -8,7 +8,7 @@
           <h1>Quản lý nhân viên</h1>
           <div>
             Chọn cửa hàng:
-              <el-select v-model="search" placeholder="Select" @change="changeStoreSearch">
+              <el-select v-model="searchStoreId" placeholder="Select" @change="changeStoreSearch">
                 <el-option
                   v-for="store in storeList"
                   :key="store.id"
@@ -25,33 +25,19 @@
             empty-text="Không có dữ liệu">
           <el-table-column
             label="Tài Khoản"
-            width="230px"
             prop="email">
           </el-table-column>
           <el-table-column
             label="Họ tên"
-            width="200px"
             prop="name">
           </el-table-column>
           <el-table-column
             label="Địa chỉ"
-            width="260px"
             prop="address">
           </el-table-column>
           <el-table-column
             label="Số điện thoại"
             prop="phone_number">
-          </el-table-column>
-          <el-table-column
-            align="right">
-              <!-- <div>
-                    Chọn sân:
-                      <el-select v-model="search" slot="prepend" placeholder="Select">
-                        <el-option label="Sân A" value="1"></el-option>
-                        <el-option label="Sân B" value="2"></el-option>
-                        <el-option label="Sân C" value="3"></el-option>
-                      </el-select>
-                  </div> -->
           </el-table-column>
         </el-table>
         <el-pagination
@@ -83,7 +69,7 @@ export default {
       searchList: [],
       accountData: [],
       storeList: [],
-      search: '',
+      searchStoreId: '',
       loader: {}
     }
   },
@@ -135,11 +121,13 @@ export default {
       }).then(res => {
         if (res.data) {
           _this.storeList = res.data
-          _this.search = _this.storeList[0].id
+          _this.searchStoreId = _this.storeList[0].id
         }
         _this.numOfPage = Math.ceil(_this.accountData.length / _this.pageSize)
         _this.changePage()
         _this.closeLoader(_this.loader)
+      }).then(() => {
+        _this.changeStoreSearch()
       })
     },
     handleClicked (index, row, typeButton) {
@@ -161,17 +149,21 @@ export default {
       })
     },
     empRowClick (row) {
+      let storeSearch = this.storeList.filter(item => {
+        return item.id === this.searchStoreId
+      })
+      sessionStorage.setItem('EMP_ID', row.id)
+      sessionStorage.setItem('STORE_NAME', storeSearch[0].name)
+      this.transitTo('UserDetail')
     },
     changeStoreSearch () {
       let _this = this
       new Promise((resolve, reject) => {
         resolve()
       }).then(() => {
-        return _this.getEmployeeByStoreId(_this.search)
+        return _this.getEmployeeByStoreId(_this.searchStoreId)
       }).then(res => {
-        let list = []
-        list.push(res)
-        _this.subAccountData = list
+        _this.subAccountData = res
       })
     },
     changePage () {

@@ -87,6 +87,20 @@ const employee = {
           })
       })
     },
+    getEmployeeByEmpId (context, empId) {
+      let url = '/api/employees/' + empId
+      return new Promise((resolve, reject) => {
+        axios.get(
+          url,
+          {headers: {Authorization: sessionStorage.getItem('token')}}
+        ).then((res) => {
+          resolve(res.data)
+        })
+          .catch((e) => {
+            reject(e)
+          })
+      })
+    },
     /**
      * api create new employee
      */
