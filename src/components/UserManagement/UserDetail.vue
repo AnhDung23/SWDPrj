@@ -104,7 +104,7 @@ export default {
         params: data
       }
       this.$router.push(param)
-    },
+    }
   }
 }
 </script>

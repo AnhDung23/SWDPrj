@@ -40,7 +40,7 @@
             prop="phone_number">
           </el-table-column>
         </el-table>
-        <el-pagination
+        <!-- <el-pagination
           background
           :page-size="pageSize"
           :current-page.sync="currentPage"
@@ -49,7 +49,7 @@
           :hide-on-single-page="true"
           @current-change="changePage()"
           :total="employeeDataList.length === 0 ? accountData.length : employeeDataList.length">
-        </el-pagination>
+        </el-pagination> -->
       </el-col>
     </el-row>
   </div>
@@ -124,7 +124,7 @@ export default {
           _this.searchStoreId = _this.storeList[0].id
         }
         _this.numOfPage = Math.ceil(_this.accountData.length / _this.pageSize)
-        _this.changePage()
+        // _this.changePage()
         _this.closeLoader(_this.loader)
       }).then(() => {
         _this.changeStoreSearch()
@@ -166,19 +166,19 @@ export default {
         _this.subEmployeeDataList = res
       })
     },
-    changePage () {
-      let firstIndex = (this.currentPage - 1) * this.pageSize
-      let lastIndex = (this.currentPage * this.pageSize - 1)
-      if (this.employeeDataList.length > 0) {
-        this.subEmployeeDataList = this.employeeDataList.filter((item, index) => {
-          return index >= firstIndex && index <= lastIndex
-        })
-      } else {
-        this.subEmployeeDataList = this.accountData.filter((item, index) => {
-          return index >= firstIndex && index <= lastIndex
-        })
-      }
-    },
+    // changePage () {
+    //   let firstIndex = (this.currentPage - 1) * this.pageSize
+    //   let lastIndex = (this.currentPage * this.pageSize - 1)
+    //   if (this.employeeDataList.length > 0) {
+    //     this.subEmployeeDataList = this.employeeDataList.filter((item, index) => {
+    //       return index >= firstIndex && index <= lastIndex
+    //     })
+    //   } else {
+    //     this.subEmployeeDataList = this.accountData.filter((item, index) => {
+    //       return index >= firstIndex && index <= lastIndex
+    //     })
+    //   }
+    // },
     /**
      * Close Loader
      * @param loader
